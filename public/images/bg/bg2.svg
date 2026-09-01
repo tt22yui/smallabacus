@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EAF6FF"/>
+      <stop offset="1" stop-color="#E3F2FD"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#sky2)"/>
+  <g opacity="0.65">
+    <path d="M120 900 Q 180 800 260 830 Q 330 790 400 830 Q 470 790 540 830 L540 900 Z" fill="#FFB6C1"/>
+    <path d="M120 900 Q 180 810 260 840 Q 330 800 400 840 Q 470 800 540 840" fill="none" stroke="#FF8FAB" stroke-width="4"/>
+    <path d="M110 840 Q 180 730 270 760 Q 340 710 420 750 Q 500 700 590 750 L590 830 Q 490 780 410 820 Q 330 780 250 820 Q 180 800 110 840 Z" fill="#FFE29A"/>
+    <path d="M100 780 Q 190 660 290 700 Q 370 640 470 690 Q 560 640 660 700 L660 780 Q 560 720 460 760 Q 370 720 280 760 Q 180 720 100 780 Z" fill="#FFD93D"/>
+    <path d="M150 780 Q 230 680 330 720 Q 420 670 520 720 Q 610 670 700 730 L700 780 Z" fill="#FFE29A" opacity="0.9"/>
+  </g>
+  <g opacity="0.4" fill="#FFFFFF">
+    <ellipse cx="300" cy="500" rx="120" ry="50"/>
+    <ellipse cx="275" cy="480" rx="75" ry="42"/>
+    <ellipse cx="335" cy="485" rx="70" ry="38"/>
+    <ellipse cx="950" cy="420" rx="110" ry="45"/>
+    <ellipse cx="925" cy="402" rx="65" ry="38"/>
+    <ellipse cx="980" cy="405" rx="60" ry="34"/>
+  </g>
+  <g opacity="0.55" fill="#87CEEB">
+    <path d="M150 1350 Q 260 1280 370 1340 Q 480 1270 590 1330 Q 700 1260 810 1320 Q 920 1260 1030 1320 L1030 1450 L150 1450 Z"/>
+    <path d="M220 1320 Q 300 1270 380 1310 Q 460 1260 540 1300 Q 620 1250 700 1290 Q 780 1240 860 1280 Q 940 1230 1010 1270 L1010 1360 Q 900 1300 790 1340 Q 680 1290 570 1330 Q 460 1280 350 1320 Q 280 1280 220 1320 Z" fill="#B3E5FC"/>
+  </g>
+  <g opacity="0.6" fill="#FFF">
+    <circle cx="180" cy="300" r="8"/><circle cx="200" cy="280" r="5"/>
+    <circle cx="520" cy="350" r="9"/><circle cx="545" cy="330" r="6"/>
+    <circle cx="880" cy="290" r="7"/><circle cx="905" cy="270" r="5"/>
+    <circle cx="1000" cy="560" r="8"/><circle cx="1025" cy="540" r="5"/>
+  </g>
+</svg>

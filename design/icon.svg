@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#4338CA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <circle cx="300" cy="250" r="120" fill="#FFFFFF" opacity="0.12"/>
+
+  <!-- 算盘外框 -->
+  <rect x="260" y="260" width="504" height="504" rx="72" fill="#FFFFFF"/>
+
+  <!-- 竖杆 -->
+  <g fill="#4338CA">
+    <rect x="354" y="296" width="12" height="432" rx="6"/>
+    <rect x="506" y="296" width="12" height="432" rx="6"/>
+    <rect x="658" y="296" width="12" height="432" rx="6"/>
+  </g>
+
+  <!-- 横梁 -->
+  <rect x="260" y="496" width="504" height="40" rx="8" fill="#4338CA"/>
+
+  <!-- 贴梁计数的 3 颗大珠 -->
+  <g fill="#F59E0B">
+    <circle cx="360" cy="440" r="56"/>
+    <circle cx="512" cy="440" r="56"/>
+    <circle cx="664" cy="440" r="56"/>
+  </g>
+</svg>

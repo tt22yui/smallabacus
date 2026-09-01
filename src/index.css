@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* 暗黑模式用 `.dark` class 切换（而非跟随系统偏好），由主题切换按钮控制 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 数字输入框：隐藏浏览器自带的上下箭头，仅保留自定义左右步进按钮 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ===== 小算盘 设计变量 =====
+   暖色主题："阳光课堂" 风格 —— 大人在给小孩制卷，
+   界面要温暖、亲切、利落；试卷本身保持干净可打印。 */
+@theme {
+  /* 品牌主色：蜜桔橙 */
+  --color-brand-50: #fff6ee;
+  --color-brand-100: #ffe9d6;
+  --color-brand-200: #ffd0a8;
+  --color-brand-300: #ffb077;
+  --color-brand-400: #ff8c3d;
+  --color-brand-500: #ff7116;
+  --color-brand-600: #ef5b08;
+  --color-brand-700: #c44409;
+  --color-brand-800: #9c370e;
+  --color-brand-900: #7e300f;
+
+  /* 品牌辅助色：奶油底 / 纸张色 */
+  --color-cream-50: #fdfbf7;
+  --color-cream-100: #faf5ec;
+  --color-cream-200: #f2e9d8;
+
+  /* 品牌强调色：青柠绿（次要高亮，克制使用） */
+  --color-lime-pop-400: #8fd14f;
+  --color-lime-pop-500: #6cbf2f;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-display: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui,
+    sans-serif;
+}
+
+:root {
+  font-family: var(--font-sans);
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #efe9dd;
+}
+
+.dark {
+  color-scheme: dark;
+}
+.dark body {
+  background: #141210;
+}
+
+/* 统一的键盘焦点样式（辅助功能） */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* 隐藏原生滚动条但保留滚动（预览区使用） */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ===== 打印样式：只打印试卷内容 ===== */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  html,
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  /* 预览模式下隐藏的非当前页，打印时全部恢复显示 */
+  .page-hidden {
+    display: block !important;
+  }
+  /* 每张试卷独立一页，铺满 A4 */
+  .print-worksheet {
+    display: block !important;
+    max-width: none !important;
+    width: 210mm;
+    height: auto;
+    aspect-ratio: auto;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 auto;
+    break-after: page;
+    break-inside: avoid;
+    page-break-after: always;
+  }
+  .print-worksheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+  /* 试卷内页 padding 随打印页边距一起调整 */
+  .print-worksheet .sheet-inner {
+    padding: 8mm;
+  }
+}
+
+/* 每题一个格子 */
+.problem-cell {
+  min-width: 0;
+}
+
+/* 预览模式下隐藏非当前页（打印时强制恢复，见 @media print） */
+.page-hidden {
+  display: none;
+}
+
+/* 自绘的细小横线，用于"姓名/日期"填空 */
+.write-line {
+  display: inline-block;
+  border-bottom: 1.5px solid #9ca3af;
+  vertical-align: bottom;
+}

@@ -1,0 +1,76 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+          - platform: macos-latest
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      # macOS：构建 dmg 并让 tauri-action 自动上传到草稿 Release
+      - name: Build macOS DMG and upload to draft release
+        if: matrix.platform == 'macos-latest'
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "SmallAbacus ${{ github.ref_name }}"
+          releaseBody: "自动构建生成：SmallAbacus ${{ github.ref_name }}"
+          releaseDraft: true
+          args: --bundles dmg
+
+      # Windows：只用命令出 exe（不产生安装器），避免 tauri-action 找不到产物而报错
+      - name: Build Windows binary
+        if: matrix.platform == 'windows-latest'
+        run: npm run tauri build -- --no-bundle
+
+      - name: Create Windows portable zip
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem src-tauri/target/release/*.exe | Select-Object -First 1
+          Compress-Archive -Path $exe.FullName -DestinationPath smallabacus_windows_portable.zip
+          Get-ChildItem smallabacus_windows_portable.zip
+
+      - name: Upload portable zip to draft release
+        if: matrix.platform == 'windows-latest'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: true
+          files: smallabacus_windows_portable.zip
+          fail_on_unmatched_files: true
