@@ -65,8 +65,8 @@ jobs:
           cat release_notes.md >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
 
-      # macOS：构建 dmg 并让 tauri-action 自动上传到草稿 Release
-      - name: Build macOS DMG and upload to draft release
+      # macOS：构建 dmg 并让 tauri-action 自动上传到正式 Release
+      - name: Build macOS DMG and upload to release
         if: matrix.platform == 'macos-latest'
         uses: tauri-apps/tauri-action@v0
         env:
@@ -75,7 +75,7 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: "SmallAbacus ${{ github.ref_name }}"
           releaseBody: ${{ steps.changelog.outputs.body }}
-          releaseDraft: true
+          releaseDraft: false
           args: --bundles dmg
 
       # Windows：只用命令出 exe（不产生安装器），避免 tauri-action 找不到产物而报错
@@ -91,12 +91,12 @@ jobs:
           Compress-Archive -Path $exe.FullName -DestinationPath smallabacus_windows_portable.zip
           Get-ChildItem smallabacus_windows_portable.zip
 
-      - name: Upload portable zip to draft release
+      - name: Upload portable zip to release
         if: matrix.platform == 'windows-latest'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          draft: true
+          draft: false
           body: ${{ steps.changelog.outputs.body }}
           files: smallabacus_windows_portable.zip
           fail_on_unmatched_files: true
