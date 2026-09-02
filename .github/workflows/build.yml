@@ -22,6 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -40,6 +42,29 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      # 生成发布日志：自动汇总自上一个 tag 以来的提交记录
+      - name: Generate release changelog
+        id: changelog
+        shell: bash
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            {
+              echo "## 更新内容（自 ${PREV_TAG} 以来）"
+              echo ""
+              git log --oneline --no-merges "${PREV_TAG}..HEAD"
+            } > release_notes.md
+          else
+            {
+              echo "## 更新内容"
+              echo ""
+              git log --oneline --no-merges HEAD
+            } > release_notes.md
+          fi
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          cat release_notes.md >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
       # macOS：构建 dmg 并让 tauri-action 自动上传到草稿 Release
       - name: Build macOS DMG and upload to draft release
         if: matrix.platform == 'macos-latest'
@@ -49,7 +74,7 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: "SmallAbacus ${{ github.ref_name }}"
-          releaseBody: "自动构建生成：SmallAbacus ${{ github.ref_name }}"
+          releaseBody: ${{ steps.changelog.outputs.body }}
           releaseDraft: true
           args: --bundles dmg
 
@@ -72,5 +97,6 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           draft: true
+          body: ${{ steps.changelog.outputs.body }}
           files: smallabacus_windows_portable.zip
           fail_on_unmatched_files: true
