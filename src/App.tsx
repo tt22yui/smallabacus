@@ -123,11 +123,16 @@ function Section(props: { icon: string; title: string; hint?: string; children: 
 /** Tauri 自定义标题栏：可拖拽区域 + 窗口控制按钮 */
 function TitleBar() {
   const [maximized, setMaximized] = useState(false);
+  const [version, setVersion] = useState<string>("");
 
   useEffect(() => {
     let canceled = false;
     (async () => {
       try {
+        const { getVersion } = await import("@tauri-apps/api/app");
+        getVersion().then((v) => {
+          if (!canceled) setVersion(v);
+        });
         const { getCurrentWindow } = await import("@tauri-apps/api/window");
         const appWindow = getCurrentWindow();
         setMaximized(await appWindow.isMaximized());
@@ -168,6 +173,11 @@ function TitleBar() {
         <span data-tauri-drag-region className="text-[11px] text-stone-400 dark:text-stone-500">
           试卷生成器
         </span>
+        {version && (
+          <span data-tauri-drag-region className="rounded border border-stone-300/60 px-1 py-px text-[10px] leading-none text-stone-400 dark:border-stone-700 dark:text-stone-500">
+            v{version}
+          </span>
+        )}
       </div>
 
       {/* 右：窗口控制按钮，图标统一 flex 居中 */}
